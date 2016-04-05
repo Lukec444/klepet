@@ -24,6 +24,11 @@ function procesirajVnosUporabnika(klepetApp, socket) {
     }
   } else {
     sporocilo = filtirirajVulgarneBesede(sporocilo);
+    if(sporocilo.indexOf(("http") && ("youtube.com")) >0){
+      var link = sporocilo.replace("watch?v=", "embed/");
+      link = link.substring(link.indexOf("http"));
+      $('#sporocila').append("<iframe src="+link+" allowfullscreen width='200' height='150' marginLeft='20'></iframe>");
+    }
     klepetApp.posljiSporocilo(trenutniKanal, sporocilo);
     $('#sporocila').append(divElementEnostavniTekst(sporocilo));
     $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
@@ -76,6 +81,11 @@ $(document).ready(function() {
   socket.on('sporocilo', function (sporocilo) {
     var novElement = divElementEnostavniTekst(sporocilo.besedilo);
     $('#sporocila').append(novElement);
+    if(sporocilo.besedilo.indexOf(("http") && ("youtube.com")) >0){
+      var link = sporocilo.besedilo.replace("watch?v=", "embed/");
+      link = link.substring(link.indexOf("http"));
+      $('#sporocila').append("<iframe src="+link+" allowfullscreen width='200' height='150' marginLeft='20'></iframe>");
+    }
   });
   
   socket.on('kanali', function(kanali) {
