@@ -24,10 +24,17 @@ function procesirajVnosUporabnika(klepetApp, socket) {
     }
   } else {
     sporocilo = filtirirajVulgarneBesede(sporocilo);
-    klepetApp.posljiSporocilo(trenutniKanal, sporocilo);
-    $('#sporocila').append(divElementEnostavniTekst(sporocilo));
-    $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
+    if(sporocilo.indexOf(("http") && ("jpg" || "gif" || "png")) >0){
+      var link = sporocilo.substring(sporocilo.indexOf('http'), (sporocilo.lastIndexOf('jpg' || 'gif' || 'png')+3));
+      $('<img />', {src: link,  width: '200px',   height: '200px', marginLeft: '20px'}).appendTo($('#sporocila'));
+      //youtube je iframe, dodaj funkcijo
+    }
+      klepetApp.posljiSporocilo(trenutniKanal, sporocilo);
+      $('#sporocila').append(divElementEnostavniTekst(sporocilo));
+      $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
+    
   }
+  
 
   $('#poslji-sporocilo').val('');
 }
@@ -76,6 +83,11 @@ $(document).ready(function() {
   socket.on('sporocilo', function (sporocilo) {
     var novElement = divElementEnostavniTekst(sporocilo.besedilo);
     $('#sporocila').append(novElement);
+    if(sporocilo.besedilo.indexOf(("http") && ("jpg" || "gif" || "png")) >0){
+      var link = sporocilo.besedilo.substring(sporocilo.besedilo.indexOf('http'), (sporocilo.besedilo.lastIndexOf('jpg' || 'gif' || 'png')+3));
+       $('<img />', {src: link,  width: '200px',   height: '200px', marginLeft: '20px'}).appendTo($('#sporocila'));
+      //youtube je iframe, dodaj funkcijo
+    }
   });
   
   socket.on('kanali', function(kanali) {
